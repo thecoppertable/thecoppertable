@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* The Copper Table Bistro: brand colours and fonts */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-teal: #073b38;          /* Deep Peacock Teal: primary */
+  --color-teal-dark: #052c2a;     /* Slightly darker teal for depth */
+  --color-copper: #c77a4b;        /* Warm Copper: accent, borders, icons */
+  --color-copper-deep: #9c5630;   /* Copper text on light backgrounds (readable) */
+  --color-copper-light: #dda47c;  /* Light Copper: highlights on teal */
+  --color-cream: #f6e9d8;         /* Champagne Cream: background */
+  --color-ivory: #fff9f0;         /* Soft Ivory: cards */
+  --color-charcoal: #26332f;      /* Charcoal Green: body text */
+
+  --font-display: var(--font-cormorant), Georgia, serif;  /* Main headings */
+  --font-heading: var(--font-playfair), Georgia, serif;   /* Section headings */
+  --font-sans: var(--font-inter), system-ui, sans-serif;  /* Body + buttons */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream font-sans text-charcoal antialiased;
+    line-height: 1.65;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-copper);
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Same page width and side padding everywhere */
+  .container-site {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  /* Same vertical spacing for every section */
+  .section {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  /* Spaced capitals label, e.g. FRENCH • ITALIAN • BISTRO */
+  .eyebrow {
+    @apply font-sans text-xs font-medium tracking-[0.3em] uppercase sm:text-sm;
+  }
+
+  /* Eyebrow with copper lines on both sides */
+  .eyebrow-lines {
+    @apply flex items-center justify-center gap-4;
+  }
+  .eyebrow-lines::before,
+  .eyebrow-lines::after {
+    content: "";
+    @apply h-px w-10 bg-copper sm:w-24;
+  }
 }
