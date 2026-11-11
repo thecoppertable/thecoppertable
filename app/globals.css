@@ -2,11 +2,11 @@
 
 /* The Copper Table Bistro: brand colours and fonts */
 @theme inline {
-  --color-teal: #3c3c1f;          /* Deep Peacock Teal: primary */
-  --color-teal-dark: #2a2a15;     /* Slightly darker teal for depth */
+  --color-teal: #3c3c1f;          /* Primary brand green (deep olive): header, footer, dark sections */
+  --color-teal-dark: #2a2a15;     /* Darker green for depth: footer bar, cards */
   --color-copper: #c77a4b;        /* Warm Copper: accent, borders, icons */
   --color-copper-deep: #9c5630;   /* Copper text on light backgrounds (readable) */
-  --color-copper-light: #dda47c;  /* Light Copper: highlights on teal */
+  --color-copper-light: #dda47c;  /* Light Copper: highlights on green */
   --color-cream: #f6e9d8;         /* Champagne Cream: background */
   --color-ivory: #fff9f0;         /* Soft Ivory: cards */
   --color-charcoal: #26332f;      /* Charcoal Green: body text */
@@ -17,9 +17,6 @@
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
   body {
     @apply bg-cream font-sans text-charcoal antialiased;
     line-height: 1.65;
@@ -34,9 +31,6 @@
     outline-offset: 3px;
   }
   @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
     *,
     *::before,
     *::after {
