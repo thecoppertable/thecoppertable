@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export const viewport: Viewport = { themeColor: "#073b38" };
+export const viewport: Viewport = { themeColor: "#3c3c1f" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;

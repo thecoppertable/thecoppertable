@@ -2,8 +2,8 @@
 
 /* The Copper Table Bistro: brand colours and fonts */
 @theme inline {
-  --color-teal: #073b38;          /* Deep Peacock Teal: primary */
-  --color-teal-dark: #052c2a;     /* Slightly darker teal for depth */
+  --color-teal: #3c3c1f;          /* Deep Peacock Teal: primary */
+  --color-teal-dark: #2a2a15;     /* Slightly darker teal for depth */
   --color-copper: #c77a4b;        /* Warm Copper: accent, borders, icons */
   --color-copper-deep: #9c5630;   /* Copper text on light backgrounds (readable) */
   --color-copper-light: #dda47c;  /* Light Copper: highlights on teal */

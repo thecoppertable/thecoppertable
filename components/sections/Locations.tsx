@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { PinIcon } from "@/components/ui/Icons";
-import { branches, mapsLink } from "@/lib/utils";
+import { mapsLink } from "@/lib/utils";
+import { getBranches } from "@/sanity/queries";
 
 /* Faint paper grain for the old-school parchment look (tiny inline SVG, no extra file) */
 const paperGrain =
@@ -27,9 +28,10 @@ function Corner({ className }: { className: string }) {
   return <span aria-hidden="true" className={`absolute h-2.5 w-2.5 rotate-45 border border-copper bg-[#ecdcc0] ${className}`} />;
 }
 
-/** "Our Locations": vintage parchment section with branch cards. Use headingLevel="h1" on the Locations page. */
-export function Locations({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" }) {
+/** "Our Locations": branches managed in Sanity. Use headingLevel="h1" on the Locations page. */
+export async function Locations({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" }) {
   const Heading = headingLevel;
+  const branches = await getBranches();
 
   return (
     <section
@@ -53,7 +55,7 @@ export function Locations({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" 
 
         <div className="border border-copper/30 px-2 pt-10 pb-12 sm:pt-12 sm:pb-14">
           <div className="container-site">
-            {/* Heading: just "Our Locations" */}
+            {/* Heading */}
             <div className="mb-8 text-center sm:mb-10">
               <Heading
                 id="locations-title"
@@ -74,15 +76,21 @@ export function Locations({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" 
                   {/* Inner line: double border */}
                   <span aria-hidden="true" className="pointer-events-none absolute inset-1 rounded-[4px] border border-copper/25" />
 
-                  {/* Framed photo with an old-photo tone */}
-                  <div id={b.slug} className="relative aspect-[3/2] scroll-mt-28 overflow-hidden rounded-sm">
-                    <Image
-                      src={b.image}
-                      alt={`The Copper Table Bistro, ${b.emirate}`}
-                      fill
-                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                      className="object-cover [filter:sepia(0.45)_saturate(0.85)_contrast(1.05)] transition-[filter,transform] duration-500 group-hover:scale-105 group-hover:[filter:none]"
-                    />
+                  {/* Framed photo with an old-photo tone (placeholder if none uploaded yet) */}
+                  <div id={b.slug} className="relative aspect-[3/2] scroll-mt-28 overflow-hidden rounded-sm bg-teal">
+                    {b.image ? (
+                      <Image
+                        src={b.image}
+                        alt={`The Copper Table Bistro, ${b.emirate}`}
+                        fill
+                        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                        className="object-cover [filter:sepia(0.45)_saturate(0.85)_contrast(1.05)] transition-[filter,transform] duration-500 group-hover:scale-105 group-hover:[filter:none]"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center font-display text-xl text-copper-light/70 italic">
+                        Photo coming soon
+                      </div>
+                    )}
                   </div>
 
                   <div className="relative flex flex-1 flex-col items-center px-4 pt-9 pb-6">
@@ -92,9 +100,11 @@ export function Locations({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" 
                     </span>
 
                     <h3 className="font-display text-2xl font-semibold tracking-wide text-teal uppercase">{b.emirate}</h3>
-                    <p className="mt-1 font-heading text-[0.95rem] text-charcoal/85 italic">
-                      {b.venue}, {b.area}
-                    </p>
+                    {(b.venue || b.area) && (
+                      <p className="mt-1 font-heading text-[0.95rem] text-charcoal/85 italic">
+                        {[b.venue, b.area].filter(Boolean).join(", ")}
+                      </p>
+                    )}
 
                     <Ornament className="my-4 scale-75" />
 
