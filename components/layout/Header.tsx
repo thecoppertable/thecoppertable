@@ -9,15 +9,15 @@ import { cn, site } from "@/lib/utils";
 import { Navigation } from "./Navigation";
 
 /* ------------------------------------------------------------------
-   LOGO FILE: put your logo in /public and set the path here.
-   Use the light/copper version (it sits on dark teal).
+   LOGO FILE: in /public. Set LOGO_WIDTH / LOGO_HEIGHT to the PNG's
+   real size (Finder → Get Info → Dimensions) so it never stretches.
 ------------------------------------------------------------------- */
 const LOGO_SRC = "/logo.png";
-const LOGO_WIDTH = 500; // your logo file's real width (any units, used for the shape)
-const LOGO_HEIGHT = 520; // your logo file's real height
+const LOGO_WIDTH = 500;
+const LOGO_HEIGHT = 520;
 
-/** Brand logo. Height is set by className; width adjusts automatically. */
-export function Logo({ className = "h-20 lg:[72px]" }: { className?: string }) {
+/** Brand logo. Height is set per screen size; width adjusts automatically. */
+export function Logo({ className = "h-11 sm:h-12 lg:h-[68px]" }: { className?: string }) {
   return (
     <Image
       src={LOGO_SRC}
@@ -25,7 +25,7 @@ export function Logo({ className = "h-20 lg:[72px]" }: { className?: string }) {
       width={LOGO_WIDTH}
       height={LOGO_HEIGHT}
       priority
-      className={cn("w-auto", className)}
+      className={cn("w-auto object-contain", className)}
     />
   );
 }
@@ -95,7 +95,8 @@ export function Header() {
       </a>
 
       <nav aria-label="Main" className="container-site flex h-16 items-center justify-between gap-8 lg:h-20">
-        <Link href="/" aria-label={`${site.name}, home`} className="shrink-0">
+        {/* Logo: fits inside the bar on every screen size */}
+        <Link href="/" aria-label={`${site.name}, home`} className="flex shrink-0 items-center py-2">
           <Logo />
         </Link>
 
@@ -107,7 +108,7 @@ export function Header() {
         {/* Mobile menu button */}
         <button
           type="button"
-          className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-md text-ivory lg:hidden"
+          className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full text-ivory transition-colors hover:bg-ivory/10 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -121,9 +122,12 @@ export function Header() {
       <div
         id="mobile-menu"
         hidden={!open}
-        className="fixed inset-x-0 top-16 bottom-0 overflow-y-auto bg-teal px-5 pt-2 pb-10 lg:hidden"
+        className="fixed inset-x-0 top-16 bottom-0 overflow-y-auto border-t border-copper/20 bg-teal px-6 pt-4 pb-10 lg:hidden"
       >
         <Navigation vertical onNavigate={() => setOpen(false)} />
+        <p className="mt-10 text-center font-display text-lg text-copper-light italic">
+          French <span className="mx-1 text-copper">•</span> Italian <span className="mx-1 text-copper">•</span> Bistro
+        </p>
       </div>
     </header>
   );

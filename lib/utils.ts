@@ -14,7 +14,7 @@ export const site = {
   email: "hello@thecoppertablebistro.com",
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "",
   currency: "AED",
-  // Add each URL when ready. Icons live in /public/icons.
+  // Add each URL when ready. Empty ones are hidden.
   social: [
     { name: "Instagram", href: "", icon: "/icons/instagram.svg" },
     { name: "Facebook", href: "", icon: "/icons/facebook.svg" },
@@ -33,6 +33,8 @@ export const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
+export type OpeningHours = { days: string; time: string };
+
 export type Branch = {
   slug: string;
   emirate: string;
@@ -40,9 +42,14 @@ export type Branch = {
   area: string;
   mapQuery: string;
   image: string;
+  imageAlt?: string;
+  address?: string;
+  phone?: string;
+  whatsapp?: string;
+  hours?: OpeningHours[];
 };
 
-/** Temporary branch list with sample photos. Moves to Sanity CMS later. */
+/** Sample branches, shown until real branches are published in Sanity. */
 export const branches: Branch[] = [
   {
     slug: "sharjah",
@@ -50,7 +57,7 @@ export const branches: Branch[] = [
     venue: "City Centre Al Zahia",
     area: "Sharjah",
     mapQuery: "City Centre Al Zahia, Sharjah",
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=80",
   },
   {
     slug: "umm-al-quwain",
@@ -58,7 +65,7 @@ export const branches: Branch[] = [
     venue: "Mall of UAQ",
     area: "Umm Al Quwain",
     mapQuery: "Mall of UAQ, Umm Al Quwain",
-    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80",
   },
   {
     slug: "abu-dhabi",
@@ -66,7 +73,7 @@ export const branches: Branch[] = [
     venue: "The Galleria",
     area: "Al Maryah Island",
     mapQuery: "The Galleria, Al Maryah Island, Abu Dhabi",
-    image: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1600&q=80",
   },
   {
     slug: "ras-al-khaimah",
@@ -74,13 +81,18 @@ export const branches: Branch[] = [
     venue: "RAK Mall",
     area: "Ras Al Khaimah",
     mapQuery: "RAK Mall, Ras Al Khaimah",
-    image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1600&q=80",
   },
 ];
 
-/** Google Maps link for a branch (opens the map app on phones). */
+/** Google Maps link for directions (opens the Maps app on phones). */
 export function mapsLink(query: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+/** Google Maps embed (no API key needed). */
+export function mapEmbedUrl(query: string): string {
+  return `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
 }
 
 /** Format a price, e.g. 92 -> "AED 92". */

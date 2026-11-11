@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/Button";
-import { PinIcon } from "@/components/ui/Icons";
-import { mapsLink } from "@/lib/utils";
+import Link from "next/link";
+import { ArrowRightIcon, PinIcon } from "@/components/ui/Icons";
 import { getBranches } from "@/sanity/queries";
 
 /* Faint paper grain for the old-school parchment look (tiny inline SVG, no extra file) */
@@ -66,22 +65,22 @@ export async function Locations({ headingLevel = "h2" }: { headingLevel?: "h1" |
               <Ornament className="mt-3" />
             </div>
 
-            {/* Branch cards */}
+            {/* Branch cards: the whole card is clickable */}
             <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
               {branches.map((b) => (
                 <li
                   key={b.slug}
-                  className="group relative flex flex-col rounded-md border border-copper/50 bg-[#f7ecda] p-2 text-center shadow-[0_10px_24px_-14px_rgba(80,45,20,0.45)] transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_18px_32px_-16px_rgba(80,45,20,0.55)]"
+                  className="group relative flex flex-col rounded-md border border-copper/50 bg-[#f7ecda] p-2 text-center shadow-[0_10px_24px_-14px_rgba(80,45,20,0.45)] transition-[transform,box-shadow] duration-300 focus-within:ring-2 focus-within:ring-copper hover:-translate-y-1 hover:shadow-[0_18px_32px_-16px_rgba(80,45,20,0.55)]"
                 >
                   {/* Inner line: double border */}
                   <span aria-hidden="true" className="pointer-events-none absolute inset-1 rounded-[4px] border border-copper/25" />
 
                   {/* Framed photo with an old-photo tone (placeholder if none uploaded yet) */}
-                  <div id={b.slug} className="relative aspect-[3/2] scroll-mt-28 overflow-hidden rounded-sm bg-teal">
+                  <div className="relative aspect-[3/2] overflow-hidden rounded-sm bg-teal">
                     {b.image ? (
                       <Image
                         src={b.image}
-                        alt={`The Copper Table Bistro, ${b.emirate}`}
+                        alt={b.imageAlt || `The Copper Table Bistro, ${b.emirate}`}
                         fill
                         sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                         className="object-cover [filter:sepia(0.45)_saturate(0.85)_contrast(1.05)] transition-[filter,transform] duration-500 group-hover:scale-105 group-hover:[filter:none]"
@@ -108,16 +107,14 @@ export async function Locations({ headingLevel = "h2" }: { headingLevel?: "h1" |
 
                     <Ornament className="my-4 scale-75" />
 
-                    <Button
-                      href={mapsLink(b.mapQuery)}
-                      external
-                      variant="outline"
-                      arrow
-                      className="mt-auto border-copper-deep"
-                      aria-label={`View ${b.emirate} location on Google Maps`}
+                    {/* One link per card, stretched to cover the whole card (after:inset-0) */}
+                    <Link
+                      href={`/locations/${b.slug}`}
+                      aria-label={`View the ${b.emirate} branch`}
+                      className="mt-auto inline-flex min-h-11 items-center justify-center gap-2.5 rounded-full border border-copper-deep px-6 py-3 text-sm font-medium tracking-[0.12em] text-teal uppercase transition-colors after:absolute after:inset-0 after:rounded-md after:content-[''] group-hover:bg-copper group-hover:text-teal focus-visible:outline-none"
                     >
-                      View location
-                    </Button>
+                      View location <ArrowRightIcon size={18} />
+                    </Link>
                   </div>
                 </li>
               ))}

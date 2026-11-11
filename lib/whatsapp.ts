@@ -1,10 +1,10 @@
 import { site } from "./utils";
 
-/** WhatsApp chat link, optionally with a pre-filled message. */
-export function whatsappLink(message?: string): string {
-  const number = site.whatsapp.replace(/\D/g, "");
+/** WhatsApp chat link with an optional message. Uses the branch number if given, else the main number. */
+export function whatsappLink(message?: string, number?: string): string {
+  const digits = (number || site.whatsapp).replace(/\D/g, "");
   const text = message ? `?text=${encodeURIComponent(message)}` : "";
-  return `https://wa.me/${number}${text}`;
+  return `https://wa.me/${digits}${text}`;
 }
 
 export type ReservationDetails = {

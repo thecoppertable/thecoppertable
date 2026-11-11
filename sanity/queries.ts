@@ -1,20 +1,25 @@
 import { isSanityConfigured, sanityFetch } from "./client";
 import { branches as sampleBranches, type Branch } from "@/lib/utils";
 
-/* ---------- Branches (Locations section) ---------- */
+/* ---------- Branches ---------- */
 
 const branchesQuery = `
-  *[_type == "location"] | order(order asc, emirate asc){
+  *[_type == "location" && defined(slug.current)] | order(order asc, emirate asc){
     "slug": slug.current,
     emirate,
     "venue": coalesce(venue, ""),
     "area": coalesce(area, ""),
     "mapQuery": coalesce(mapQuery, venue + ", " + area, emirate),
-    "image": coalesce(image.asset->url, "")
+    "image": coalesce(image.asset->url, ""),
+    "imageAlt": image.alt,
+    address,
+    phone,
+    whatsapp,
+    "hours": coalesce(hours[]{ days, time }, [])
   }
 `;
 
-/** Branches from Sanity. Falls back to the sample branches until real ones are published. */
+/** All branches from Sanity. Falls back to the samples until real ones are published. */
 export async function getBranches(): Promise<Branch[]> {
   if (!isSanityConfigured) return sampleBranches;
   try {
@@ -24,4 +29,10 @@ export async function getBranches(): Promise<Branch[]> {
     console.error("[sanity] Could not load branches", error);
     return sampleBranches;
   }
+}
+
+/** One branch by its slug (e.g. "sharjah"), or null if it doesn't exist. */
+export async function getBranch(slug: string): Promise<Branch | null> {
+  const all = await getBranches();
+  return all.find((b) => b.slug === slug) ?? null;
 }
